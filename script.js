@@ -2,18 +2,16 @@ const nameInput = document.getElementById("name");
 const scoreInput = document.getElementById("score");
 const scores = document.getElementById("scores");
 
-// Save score to Local Storage
 function saveScore() {
   const name = nameInput.value.trim();
   const score = scoreInput.value.trim();
 
   if (!name || !score) return;
 
-  // IMPORTANT: use key "scores"
   let storedScores = JSON.parse(localStorage.getItem("scores")) || [];
 
-  // Add newest score to the TOP
-  storedScores.unshift({ name, score });
+  // push normally
+  storedScores.push({ name, score });
 
   localStorage.setItem("scores", JSON.stringify(storedScores));
 
@@ -23,13 +21,17 @@ function saveScore() {
   showScores();
 }
 
-// Show scores in div
 function showScores() {
-  const storedScores = JSON.parse(localStorage.getItem("scores")) || [];
+  let storedScores = JSON.parse(localStorage.getItem("scores")) || [];
 
   if (storedScores.length === 0) {
-    scores.innerHTML = "No scores yet";
+    scores.textContent = "No scores yet";
     return;
+  }
+
+  // rotate: move first element to end
+  if (storedScores.length > 1) {
+    storedScores = storedScores.slice(1).concat(storedScores[0]);
   }
 
   let tableHTML = `
@@ -40,11 +42,11 @@ function showScores() {
       </tr>
   `;
 
-  storedScores.forEach(entry => {
+  storedScores.forEach(s => {
     tableHTML += `
       <tr>
-        <td>${entry.name}</td>
-        <td>${entry.score}</td>
+        <td>${s.name}</td>
+        <td>${s.score}</td>
       </tr>
     `;
   });
