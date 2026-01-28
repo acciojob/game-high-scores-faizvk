@@ -9,16 +9,14 @@ function saveScore() {
 
   if (!name || !score) return;
 
-  // Fetch existing scores (or initialize empty array)
-  let storedScores = JSON.parse(localStorage.getItem("highScores")) || [];
+  // IMPORTANT: use key "scores"
+  let storedScores = JSON.parse(localStorage.getItem("scores")) || [];
 
-  // Add new score
-  storedScores.push({ name, score });
+  // Add newest score to the TOP
+  storedScores.unshift({ name, score });
 
-  // Save back to localStorage
-  localStorage.setItem("highScores", JSON.stringify(storedScores));
+  localStorage.setItem("scores", JSON.stringify(storedScores));
 
-  // Clear inputs
   nameInput.value = "";
   scoreInput.value = "";
 
@@ -27,7 +25,7 @@ function saveScore() {
 
 // Show scores in div
 function showScores() {
-  const storedScores = JSON.parse(localStorage.getItem("highScores")) || [];
+  const storedScores = JSON.parse(localStorage.getItem("scores")) || [];
 
   if (storedScores.length === 0) {
     scores.innerHTML = "No scores yet";
@@ -51,7 +49,7 @@ function showScores() {
     `;
   });
 
-  tableHTML += "</table>";
+  tableHTML += `</table>`;
 
   scores.innerHTML = tableHTML;
 }
